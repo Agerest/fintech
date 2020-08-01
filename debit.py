@@ -63,7 +63,7 @@ def set_birthdate(message):
         globalBot.register_next_step_handler(message, set_phone_number)
     except ValueError:
         globalBot.send_message(message.from_user.id, "Неверный формат даты, используйте ДД.ММ.ГГГГ")
-        globalBot.register_next_step_handler(message, set_birthdate())
+        globalBot.register_next_step_handler(message, set_birthdate)
 
 
 def set_phone_number(message):
