@@ -101,7 +101,7 @@ def set_passport_date(message):
         globalBot.register_next_step_handler(message, set_passport_organization)
     except ValueError:
         globalBot.send_message(message.from_user.id, "Неверный формат даты, используйте ДД.ММ.ГГГГ")
-        globalBot.register_next_step_handler(message, set_passport_date())
+        globalBot.register_next_step_handler(message, set_passport_date)
 
 
 # final method
