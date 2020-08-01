@@ -52,10 +52,10 @@ def set_middle_name(message):
     if application.middleName == '':
         application.middleName = message.text
     globalBot.send_message(message.from_user.id, "Введите дату рождения.")
-    globalBot.register_next_step_handler(message, set_birth_date)
+    globalBot.register_next_step_handler(message, set_birthdate)
 
 
-def set_birth_date(message):
+def set_birthdate(message):
     try:
         datetime.datetime.strptime(message.text, '%Y-%m-%d')
         application.birthdate = message.text
@@ -63,7 +63,7 @@ def set_birth_date(message):
         globalBot.register_next_step_handler(message, set_phone_number)
     except ValueError:
         globalBot.send_message(message.from_user.id, "Неверный формат даты, используйте ДД.ММ.ГГГГ")
-        globalBot.register_next_step_handler(message, set_birth_date())
+        globalBot.register_next_step_handler(message, set_birthdate())
 
 
 def set_phone_number(message):
