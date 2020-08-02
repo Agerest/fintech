@@ -8,7 +8,7 @@ globalBot = main.bot
 
 
 def init():
-    app.run(port=8079)
+    app.run(host='192.168.1.66', port=8079)
 
 
 @app.route('/', methods=['GET'])
@@ -26,3 +26,4 @@ def get_tasks():
     message = content['message']
     print('sending message to user_id=%s' % user_id)
     globalBot.send_message(user_id, message)
+    return 'success'

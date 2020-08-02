@@ -159,4 +159,4 @@ def set_marital_status(message):
     if code == 200:
         globalBot.send_message(message.from_user.id, messages.SUCCESSFUL_APPLICATION)
     else:
-        globalBot.send_message(message.from_user.id, messages.FAILED_APPLICATION)
+        globalBot.send_message(message.from_user.id, messages.FAILED)

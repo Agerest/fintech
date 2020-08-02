@@ -1,6 +1,7 @@
 import requests
 
 import data
+import messages
 
 globalBot = None
 
@@ -8,22 +9,22 @@ globalBot = None
 def init(message, bot):
     global globalBot
     globalBot = bot
-    globalBot.send_message(message.from_user.id, "Введите ваше сообщение в техподдержку (для завершения \'выход\'")
+    globalBot.send_message(message.from_user.id, messages.ENTER_MESSAGE)
     globalBot.register_next_step_handler(message, get_message)
 
 
 def get_message(message):
     if message == 'выход':
-        globalBot.send_message(message.from_user.id, "Вы вышли из техподдержки")
+        globalBot.send_message(message.from_user.id, messages.TECH_SUPPORT_EXIT)
     else:
-        result = {'userId': message.from_user.id,
+        result = {'telegramId': message.from_user.id,
                   'message': message.text}
         response = \
             requests.post(data.HOST + data.SEND_MESSAGE_URL, json=result, headers={'content-type': 'application/json'})
         code = response.status_code
         print(code)
         if code == 200:
-            globalBot.send_message(message.from_user.id, "Ваше сообщение успешно доставлено, ожидайте ответа")
+            globalBot.send_message(message.from_user.id, messages.TECH_SUPPORT_SUCCESS)
         else:
-            globalBot.send_message(message.from_user.id, "Ошибка")
+            globalBot.send_message(message.from_user.id, messages.FAILED)
         globalBot.register_next_step_handler(message, get_message)
