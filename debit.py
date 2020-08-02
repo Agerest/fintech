@@ -26,7 +26,7 @@ globalBot = None
 
 
 # init method
-def debit(message, bot):
+def init(message, bot):
     global application
     global globalBot
     globalBot = bot

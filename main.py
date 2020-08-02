@@ -1,20 +1,19 @@
 import threading
 
-import requests
 import telebot
 
+import controller
 import data
 import debit
 import keyboard
+import techsupport
 
 bot = telebot.TeleBot(data.BOT_TOKEN)
 
 if __name__ == '__main__':
-    # response = requests.post(data.CREATE_DEBIT_URL, data={'debitCard': '{}'}, headers=data.headers)
-    # print(response.status_code)
     bot_polling_thread = threading.Thread(target=bot.polling, args=())
     bot_polling_thread.start()
-
+    controller.init(bot)
     print('bot is started')
 
 
@@ -33,4 +32,6 @@ def test(message):
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text.lower() == 'дебетовая карта':
-        debit.debit(message, bot)
+        debit.init(message, bot)
+    elif message.text.lower() == 'техподдержка':
+        techsupport.init(message, bot)
