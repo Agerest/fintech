@@ -1,14 +1,20 @@
 from flask import Flask, abort
 from flask import request
+import main
 
 app = Flask(__name__)
 
-globalBot = None
+globalBot = main.bot
 
 
-def init(bot):
-    global globalBot
-    globalBot = bot
+def init():
+    app.run(port=8079)
+
+
+@app.route('/', methods=['GET'])
+def test():
+    print('test request')
+    return 'TEST'
 
 
 @app.route('/api/message/send', methods=['POST'])

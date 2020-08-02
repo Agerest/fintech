@@ -13,7 +13,8 @@ bot = telebot.TeleBot(data.BOT_TOKEN)
 if __name__ == '__main__':
     bot_polling_thread = threading.Thread(target=bot.polling, args=())
     bot_polling_thread.start()
-    controller.init(bot)
+    flask_thread = threading.Thread(target=controller.init, args=())
+    flask_thread.start()
     print('bot is started')
 
 
