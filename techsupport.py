@@ -18,7 +18,8 @@ def get_message(message):
     else:
         result = {'userId': message.from_user.id,
                   'message': message.text}
-        response = requests.post(data.SEND_MESSAGE_URL, json=result, headers={'content-type': 'application/json'})
+        response = \
+            requests.post(data.HOST + data.SEND_MESSAGE_URL, json=result, headers={'content-type': 'application/json'})
         code = response.status_code
         print(code)
         if code == 200:

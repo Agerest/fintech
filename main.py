@@ -3,8 +3,9 @@ import threading
 import telebot
 
 import controller
+import credit_card
 import data
-import debit
+import debit_card
 import keyboard
 import techsupport
 
@@ -33,6 +34,8 @@ def test(message):
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text.lower() == 'дебетовая карта':
-        debit.init(message, bot)
+        debit_card.init(message, bot)
     elif message.text.lower() == 'техподдержка':
         techsupport.init(message, bot)
+    if message.text.lower() == 'кредитная карта':
+        credit_card.init(message, bot)
