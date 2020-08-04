@@ -75,8 +75,16 @@ def set_birthdate(message):
 
 def set_phone_number(message):
     application.phoneNumber = message.text
-    globalBot.send_message(message.from_user.id, messages.ENTER_EMAIL)
-    globalBot.register_next_step_handler(message, set_email)
+    result = {'creditCard': json.dumps(application.__dict__)}
+    response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_URL,
+                             json=result, headers={'content-type': 'application/json'})
+    code = response.status_code
+    print(code)
+    if code == 200:
+        globalBot.send_message(message.from_user.id, messages.ENTER_EMAIL)
+        globalBot.register_next_step_handler(message, set_email)
+    else:
+        globalBot.send_message(message.from_user.id, messages.FAILED)
 
 
 def set_email(message):
@@ -152,11 +160,11 @@ def set_marital_status(message):
     application.maritalStatus = message.text
     application.telegramId = message.from_user.id
     result = {'creditCard': json.dumps(application.__dict__)}
-    response = \
-        requests.post(data.CUBA_HOST + data.CREATE_CREDIT_URL, json=result, headers={'content-type': 'application/json'})
+    response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_FULL_URL,
+                             json=result, headers={'content-type': 'application/json'})
     code = response.status_code
     print(code)
     if code == 200:
-        globalBot.send_message(message.from_user.id, messages.SUCCESSFUL_APPLICATION)
+        globalBot.send_message(message.from_user.id, messages.SUCCESSFUL_APPLICATION + response.text)
     else:
         globalBot.send_message(message.from_user.id, messages.FAILED)
