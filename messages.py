@@ -10,13 +10,23 @@ ENTER_PASSPORT_DATA = 'Введите ваш номер и серию паспо
 ENTER_PASSPORT_DATE = 'Введите дату получения паспорта (формат ДД.ММ.ГГГГ)'
 ENTER_PASSPORT_ORGANIZATION = 'Введите место получения паспорта'
 SUCCESSFUL_APPLICATION = 'Заявка успешно создана'
-FAILED = 'Ошибка'
 ENTER_WORK_PLACE = 'Введите ваше место работы'
 ENTER_WORK_EXPERIENCE = 'Введите ваш стаж работы'
 ENTER_MONTHLY_INCOME = 'Введите размер вашего ежемесячного дохода'
 ENTER_EMPLOYER_ADDRESS = 'Введите адрес вашего работодателя'
 ENTER_EMPLOYER_PHONE_NUMBER = 'Введите номер телефона вашего работодателя'
 ENTER_MARITAL_STATUS = 'Ваше семейное положение'
+
+FAILED = 'Ошибка'
+
 ENTER_MESSAGE = 'Введите ваше сообщение в техподдержку (для завершения \'выход\')'
 TECH_SUPPORT_EXIT = 'Вы вышли из техподдержки'
 TECH_SUPPORT_SUCCESS = 'Ваше сообщение успешно доставлено, ожидайте ответа'
+
+ENTER_CURRENT_APPLICATION = 'Выберите заявку'
+APPLICATION_STATUS = 'Статус заявки: '
+
+CREDIT_CARD = 'Кредитная карта'
+DEBIT_CARD = 'Дебетовая карта'
+CREDIT = 'Потребительский кредит'
+TECH_SUPPORT = 'Техподдержка'

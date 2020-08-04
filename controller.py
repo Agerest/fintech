@@ -1,5 +1,7 @@
 from flask import Flask, abort
 from flask import request
+
+import data
 import main
 
 app = Flask(__name__)
@@ -8,7 +10,7 @@ globalBot = main.bot
 
 
 def init():
-    app.run(host='192.168.1.66', port=8079)
+    app.run(host=data.FLASK_HOST, port=data.FLASK_PORT)
 
 
 @app.route('/', methods=['GET'])

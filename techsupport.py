@@ -20,7 +20,7 @@ def get_message(message):
         result = {'telegramId': message.from_user.id,
                   'message': message.text}
         response = \
-            requests.post(data.HOST + data.SEND_MESSAGE_URL, json=result, headers={'content-type': 'application/json'})
+            requests.post(data.CUBA_HOST + data.SEND_MESSAGE_URL, json=result, headers={'content-type': 'application/json'})
         code = response.status_code
         print(code)
         if code == 200:

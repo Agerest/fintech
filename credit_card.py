@@ -11,7 +11,7 @@ class CreditCard:
     firstName = ''
     middleName = ''
     lastName = ''
-    birthDate = ''
+    birthdate = ''
     phoneNumber = ''
     email = ''
     address = ''
@@ -153,7 +153,7 @@ def set_marital_status(message):
     application.telegramId = message.from_user.id
     result = {'creditCard': json.dumps(application.__dict__)}
     response = \
-        requests.post(data.HOST + data.CREATE_CREDIT_URL, json=result, headers={'content-type': 'application/json'})
+        requests.post(data.CUBA_HOST + data.CREATE_CREDIT_URL, json=result, headers={'content-type': 'application/json'})
     code = response.status_code
     print(code)
     if code == 200:
