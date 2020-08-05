@@ -1,9 +1,10 @@
 import requests
+import telebot
 
 import data
 import messages
 
-globalBot = None
+globalBot = telebot.TeleBot
 
 
 def init(message, bot):

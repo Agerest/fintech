@@ -2,6 +2,7 @@ import datetime
 import json
 
 import requests
+import telebot
 
 import data
 import messages
@@ -22,8 +23,8 @@ class DebitCard:
     telegramId = ''
 
 
-application = None
-globalBot = None
+application = DebitCard
+globalBot = telebot.TeleBot
 
 
 # init method
