@@ -1,9 +1,10 @@
 import requests
+import telebot
 
 import data
 import messages
 
-globalBot = None
+globalBot = telebot.TeleBot
 
 
 def init(message, bot):
@@ -14,13 +15,13 @@ def init(message, bot):
 
 
 def get_message(message):
-    if message == 'выход':
+    if message.text.lower() == 'выход':
         globalBot.send_message(message.from_user.id, messages.TECH_SUPPORT_EXIT)
     else:
         result = {'telegramId': message.from_user.id,
                   'message': message.text}
-        response = \
-            requests.post(data.HOST + data.SEND_MESSAGE_URL, json=result, headers={'content-type': 'application/json'})
+        response = requests.post(data.CUBA_HOST + data.SEND_MESSAGE_URL,
+                                 json=result, headers={'content-type': 'application/json'})
         code = response.status_code
         print(code)
         if code == 200:

@@ -2,11 +2,12 @@ import threading
 
 import telebot
 
+import application
 import controller
 import credit_card
 import data
 import debit_card
-import keyboard
+import messages
 import techsupport
 
 bot = telebot.TeleBot(data.BOT_TOKEN)
@@ -21,8 +22,11 @@ if __name__ == '__main__':
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    print(message.text)
-    bot.send_message(message.chat.id, 'Тип заявки', reply_markup=keyboard.WELCOME)
+    keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
+    keyboard.row(messages.CREDIT_CARD, messages.DEBIT_CARD)
+    keyboard.row(messages.CREDIT, messages.TECH_SUPPORT)
+    keyboard.row(messages.APPLICATION_LIST)
+    bot.send_message(message.chat.id, 'Тип заявки', reply_markup=keyboard)
 
 
 @bot.message_handler(commands=['test'])
@@ -33,9 +37,12 @@ def test(message):
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
-    if message.text.lower() == 'дебетовая карта':
+    print(message.text)
+    if message.text == messages.DEBIT_CARD:
         debit_card.init(message, bot)
-    elif message.text.lower() == 'техподдержка':
+    elif message.text == messages.TECH_SUPPORT:
         techsupport.init(message, bot)
-    if message.text.lower() == 'кредитная карта':
+    if message.text == messages.CREDIT_CARD:
         credit_card.init(message, bot)
+    if message.text == messages.APPLICATION_LIST:
+        application.init(message, bot)

@@ -2,16 +2,18 @@ import datetime
 import json
 
 import requests
+import telebot
 
 import data
 import messages
 
 
 class DebitCard:
+    id = ''
     firstName = ''
     middleName = ''
     lastName = ''
-    birthDate = ''
+    birthdate = ''
     phoneNumber = ''
     email = ''
     address = ''
@@ -19,11 +21,10 @@ class DebitCard:
     passportSerial = ''
     passportDate = ''
     passportOrganization = ''
-    telegramId = ''
 
 
-application = None
-globalBot = None
+application = DebitCard
+globalBot = telebot.TeleBot
 
 
 # init method
@@ -69,8 +70,17 @@ def set_birthdate(message):
 
 def set_phone_number(message):
     application.phoneNumber = message.text
-    globalBot.send_message(message.from_user.id, messages.ENTER_EMAIL)
-    globalBot.register_next_step_handler(message, set_email)
+    result = {'debitCard': json.dumps(application.__dict__), 'telegramId': message.from_user.id}
+    response = requests.post(data.CUBA_HOST + data.CREATE_DEBIT_URL,
+                             json=result, headers={'content-type': 'application/json'})
+    code = response.status_code
+    print(code)
+    if code == 200:
+        application.id = response.text
+        globalBot.send_message(message.from_user.id, messages.ENTER_EMAIL)
+        globalBot.register_next_step_handler(message, set_email)
+    else:
+        globalBot.send_message(message.from_user.id, messages.FAILED)
 
 
 def set_email(message):
@@ -110,11 +120,12 @@ def set_passport_organization(message):
     application.passportOrganization = message.text
     application.telegramId = message.from_user.id
     result = {'debitCard': json.dumps(application.__dict__)}
-    response = \
-        requests.post(data.HOST + data.CREATE_DEBIT_URL, json=result, headers={'content-type': 'application/json'})
+    response = requests.post(data.CUBA_HOST + data.CREATE_DEBIT_FULL_URL,
+                             json=result, headers={'content-type': 'application/json'})
     code = response.status_code
     print(code)
     if code == 200:
-        globalBot.send_message(message.from_user.id, messages.SUCCESSFUL_APPLICATION)
+        json_response = response.json()
+        globalBot.send_message(message.from_user.id, messages.SUCCESSFUL_APPLICATION + json_response['id'])
     else:
         globalBot.send_message(message.from_user.id, messages.FAILED)
