@@ -1,5 +1,3 @@
-import json
-
 import requests
 import telebot
 
@@ -8,8 +6,10 @@ import messages
 
 
 class Application(object):
-    def __init__(self, j):
-        self.__dict__ = json.loads(j)
+    def __init__(self, id, type, status):
+        self.id = id
+        self.type = type
+        self.status = status
 
     id = None
     type = None
@@ -27,19 +27,19 @@ def init(message, bot):
 
 
 def get_keyboard(message):
-    body = {'id': message.from_user.id}
-    print(body)
     response = requests.post(data.CUBA_HOST + data.GET_APPLICATION_LIST_URL,
-                             json=body, headers={'content-type': 'application/json'})
+                             json={'id': message.from_user.id}, headers={'content-type': 'application/json'})
     code = response.status_code
     print(code)
     if code == 200:
         application_list_json = response.json()
         global applicationList
         for app in application_list_json:
-            applicationList.append(Application(app))
+            applicationList.append(Application(app['id'], app['type'], app['status']))
+        result_array = [key.id for key in applicationList]
+        print(result_array)
         keyboard = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
-        keyboard.row({key['id'] for key in application_list_json})
+        keyboard.row(*result_array)
         globalBot.send_message(message.from_user.id, messages.ENTER_CURRENT_APPLICATION, reply_markup=keyboard)
         globalBot.register_next_step_handler(message, message_handler)
     else:

@@ -10,7 +10,7 @@ globalBot = telegram_main.bot
 
 
 def init():
-    app.run(host=data.FLASK_HOST, port=data.FLASK_PORT)
+    app.run(port=data.FLASK_PORT)
 
 
 @app.route('/', methods=['GET'])
