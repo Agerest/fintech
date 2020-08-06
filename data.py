@@ -17,3 +17,5 @@ GET_APPLICATION_URL = config.get('Cuba', 'GET_APPLICATION_URL')
 
 FLASK_HOST = config.get('Flask', 'HOST')
 FLASK_PORT = config.get('Flask', 'PORT')
+
+ICQ_TOKEN = config.get('ICQ', 'TOKEN')

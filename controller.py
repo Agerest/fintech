@@ -2,11 +2,11 @@ from flask import Flask, abort
 from flask import request
 
 import data
-import main
+from telegram import telegram_main
 
 app = Flask(__name__)
 
-globalBot = main.bot
+globalBot = telegram_main.bot
 
 
 def init():
