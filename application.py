@@ -27,8 +27,10 @@ def init(message, bot):
 
 
 def get_keyboard(message):
-    response = requests.get(data.CUBA_HOST + data.GET_APPLICATION_LIST_URL,
-                            json={'id': message.from_user.id}, headers={'content-type': 'application/json'})
+    body = {'id': message.from_user.id}
+    print(body)
+    response = requests.post(data.CUBA_HOST + data.GET_APPLICATION_LIST_URL,
+                             json=body, headers={'content-type': 'application/json'})
     code = response.status_code
     print(code)
     if code == 200:
