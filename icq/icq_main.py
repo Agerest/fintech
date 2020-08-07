@@ -18,12 +18,16 @@ def base(bot, event):
 
 
 def inputer(bot, event):
-    appllience = get_debit_appllience(event.data['from']['userId'])
-    if appllience == None:
-        bot.send_text(chat_id=event.data['from']['userId'], text='Я не понимаю что вы хотите. Вы можете оформить заявку'
-                                                                 ' на продукты банка введя команду ')
+    if '/' in event.text:
+        pass
     else:
-        appllience.set_field(bot, event, event.text)
+        appllience = get_debit_appllience(event.data['from']['userId'])
+        if appllience == None:
+            bot.send_text(chat_id=event.data['from']['userId'],
+                          text='Я не понимаю что вы хотите. Вы можете оформить заявку'
+                               ' на продукты банка введя команду ')
+        else:
+            appllience.set_field(bot, event, event.text)
 
 
 def get_debit_appllience(id):
@@ -51,7 +55,7 @@ def debit_card_data_grabbing(bot, event):
 
 def credit_card_data_grabbing(bot, event):
     send_callback_query(bot, event, messages.INFORMATION_BEFORE_START_FILLING_DATA)
-    bot.send_text(chat_id=event.data['from']['userId'], text='shol nahui')
+    # bot.send_text(chat_id=event.data['from']['userId'], text='shol nahui')
 
 
 def send_callback_query(bot, event, text):
