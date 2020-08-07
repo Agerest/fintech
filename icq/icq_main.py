@@ -21,7 +21,7 @@ def inputer(bot, event):
     appllience = get_debit_appllience(event.data['from']['userId'])
     if appllience == None:
         bot.send_text(chat_id=event.data['from']['userId'], text='Я не понимаю что вы хотите. Вы можете оформить заявку'
-                                                                 'на продукты банка введя команду ')
+                                                                 ' на продукты банка введя команду ')
     else:
         appllience.set_field(bot, event, event.text)
 
@@ -81,4 +81,3 @@ def init():
     bot.dispatcher.add_handler(MessageHandler(callback=inputer))
     bot.dispatcher.add_handler(BotButtonCommandHandler(callback=buttons_cb))
     bot.start_polling()
-    # bot.idle()

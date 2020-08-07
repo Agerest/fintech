@@ -19,7 +19,7 @@ def start_message(message):
     keyboard.row(messages.CREDIT_CARD, messages.DEBIT_CARD)
     keyboard.row(messages.CREDIT, messages.TECH_SUPPORT)
     keyboard.row(messages.APPLICATION_LIST)
-    bot.send_message(message.chat.id, 'Тип заявки', reply_markup=keyboard)
+    bot.send_message(message.chat.id, messages.GREETING_NEW_USERS, reply_markup=keyboard)
 
 
 @bot.message_handler(commands=['test'])

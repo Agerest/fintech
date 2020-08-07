@@ -8,6 +8,7 @@ import messages
 
 
 class CardBase:
+    telegramId = None
     firstName = None
     middleName = None
     lastName = None

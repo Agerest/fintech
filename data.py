@@ -18,3 +18,6 @@ GET_APPLICATION_URL = config.get('Cuba', 'GET_APPLICATION_URL')
 FLASK_PORT = config.get('Flask', 'PORT')
 
 ICQ_TOKEN = config.get('ICQ', 'TOKEN')
+
+GROUP_TOKEN = config.get('VK', 'GROUP_TOKEN')
+GROUP_ID = config.get('VK', 'GROUP_ID')
