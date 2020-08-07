@@ -9,6 +9,8 @@ from icq.debit_card import DebitCard
 
 list_debits = []
 
+bot = Bot
+
 
 def base(bot, event):
     if event.text == '/info':
@@ -80,6 +82,7 @@ def send_start_message(bot, event):
 
 
 def init():
+    global bot
     bot = Bot(data.ICQ_TOKEN)
     bot.dispatcher.add_handler(CommandHandler(callback=base))
     bot.dispatcher.add_handler(MessageHandler(callback=inputer))

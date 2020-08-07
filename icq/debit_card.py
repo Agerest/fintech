@@ -44,18 +44,7 @@ class DebitCard(CardBase):
     def __init__(self, bot, event, id):
         bot.send_text(chat_id=event.data['from']['userId'], text=messages. ENTER_FIO)
         self.telegramId = id
-
-    def send_data(self,bot,event):
-        result = {'debitCard': json.dumps(self.__dict__), 'telegramId': event.data['from']['userId']}
-        response = requests.post(data.CUBA_HOST + data.CREATE_DEBIT_URL,
-                                 json=result, headers={'content-type': 'application/json'})
-        code = response.status_code
-        print(code)
-        if code == 200:
-            bot.send_text(chat_id=event.data['from']['userId'],
-                          text=messages.SUCCESSFUL_APPLICATION + response.text)
-        else:
-            bot.send_text(chat_id=event.data['from']['userId'], text=messages.FAILED)
+        
 
     def set_field(self, bot, event, value):
         if self.firstName is None:
@@ -96,4 +85,14 @@ class DebitCard(CardBase):
                 bot.send_text(chat_id=event.data['from']['userId'], text=messages.WRONG_DATE)
         elif self.passportOrganization is None:
             self.passportOrganization = value
-            self.send_data(bot, event)
+            result = {'debitCard': json.dumps(self.__dict__), 'telegramId': event.data['from']['userId'],
+                      'userType': 'icq'}
+            response = requests.post(data.CUBA_HOST + data.CREATE_DEBIT_URL,
+                                     json=result, headers={'content-type': 'application/json'})
+            code = response.status_code
+            print(code)
+            if code == 200:
+                bot.send_text(chat_id=event.data['from']['userId'],
+                              text=messages.SUCCESSFUL_APPLICATION + response.text)
+            else:
+                bot.send_text(chat_id=event.data['from']['userId'], text=messages.FAILED)

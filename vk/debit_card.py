@@ -81,7 +81,7 @@ class DebitCard(CardBase):
                 bot.messages.send(user_id=event.obj.from_id, random_id=event.obj.random_id, message=messages.WRONG_DATE)
         elif self.passportOrganization is None:
             self.passportOrganization = value
-            result = {'debitCard': json.dumps(self.__dict__), 'telegramId': event.obj.from_id}
+            result = {'debitCard': json.dumps(self.__dict__), 'telegramId': event.obj.from_id, 'userType': 'vk'}
             response = requests.post(data.CUBA_HOST + data.CREATE_DEBIT_URL,
                                      json=result, headers={'content-type': 'application/json'})
             code = response.status_code
