@@ -15,6 +15,10 @@ def init():
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
+    start(message)
+
+
+def start(message):
     keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
     keyboard.row(messages.CREDIT_CARD, messages.DEBIT_CARD)
     keyboard.row(messages.CREDIT, messages.TECH_SUPPORT)

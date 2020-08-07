@@ -75,7 +75,8 @@ class DebitCard(CardBase):
                 bot.send_text(chat_id=event.data['from']['userId'], text=messages.WRONG_DATE)
         elif self.passportOrganization is None:
             self.passportOrganization = value
-            result = {'debitCard': json.dumps(self.__dict__), 'telegramId': event.data['from']['userId']}
+            result = {'debitCard': json.dumps(self.__dict__), 'telegramId': event.data['from']['userId'],
+                      'userType': 'icq'}
             response = requests.post(data.CUBA_HOST + data.CREATE_DEBIT_URL,
                                      json=result, headers={'content-type': 'application/json'})
             code = response.status_code
