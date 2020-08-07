@@ -54,8 +54,8 @@ def debit_card_data_grabbing(bot, event):
 
 
 def credit_card_data_grabbing(bot, event):
-    send_callback_query(bot, event, messages.INFORMATION_BEFORE_START_FILLING_DATA)
-    # bot.send_text(chat_id=event.data['from']['userId'], text='shol nahui')
+    send_callback_query(bot, event, messages.TMP_NOT_WORKING)
+    # bot.send_text(chat_id=event.data['from']['userId'], text='')
 
 
 def send_callback_query(bot, event, text):

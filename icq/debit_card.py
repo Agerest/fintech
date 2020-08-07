@@ -1,5 +1,6 @@
 import datetime
 import json
+import phonenumbers
 
 import requests
 
@@ -30,21 +31,38 @@ def date_is_valid(value):
         return False
 
 
+def phone_is_valid(value):
+    try:
+        x = phonenumbers.parse(value)
+    except phonenumbers.phonenumberutil.NumberParseException:
+        return False
+    return True
+
+
 class DebitCard(CardBase):
 
     def __init__(self, bot, event, id):
-        bot.send_text(chat_id=event.data['from']['userId'], text=messages.ENTER_FIRST_NAME)
+        bot.send_text(chat_id=event.data['from']['userId'], text=messages. ENTER_FIO)
         self.telegramId = id
+
+    def send_data(self,bot,event):
+        result = {'debitCard': json.dumps(self.__dict__), 'telegramId': event.data['from']['userId']}
+        response = requests.post(data.CUBA_HOST + data.CREATE_DEBIT_URL,
+                                 json=result, headers={'content-type': 'application/json'})
+        code = response.status_code
+        print(code)
+        if code == 200:
+            bot.send_text(chat_id=event.data['from']['userId'],
+                          text=messages.SUCCESSFUL_APPLICATION + response.text)
+        else:
+            bot.send_text(chat_id=event.data['from']['userId'], text=messages.FAILED)
 
     def set_field(self, bot, event, value):
         if self.firstName is None:
-            self.firstName = value
-            bot.send_text(chat_id=event.data['from']['userId'], text=messages.ENTER_MIDDLE_NAME)
-        elif self.middleName is None:
-            self.middleName = value
-            bot.send_text(chat_id=event.data['from']['userId'], text=messages.ENTER_LAST_NAME)
-        elif self.lastName is None:
-            self.lastName = value
+            FIO = value.split()
+            self.firstName = FIO[0]
+            self.lastName = FIO[1]
+            self.middleName = FIO[2]
             bot.send_text(chat_id=event.data['from']['userId'], text=messages.ENTER_BIRTHDATE)
         elif self.birthdate is None:
             if date_is_valid(value):
@@ -53,8 +71,11 @@ class DebitCard(CardBase):
             else:
                 bot.send_text(chat_id=event.data['from']['userId'], text=messages.WRONG_DATE)
         elif self.phoneNumber is None:
-            self.phoneNumber = value
-            bot.send_text(chat_id=event.data['from']['userId'], text=messages.ENTER_EMAIL)
+            if phone_is_valid(value):
+                self.phoneNumber = value
+                bot.send_text(chat_id=event.data['from']['userId'], text=messages.ENTER_EMAIL)
+            else:
+                bot.send_text(chat_id=event.data['from']['userId'], text=messages.WRONG_PHONE_FORMAT)
         elif self.email is None:
             self.email = value
             bot.send_text(chat_id=event.data['from']['userId'], text=messages.ENTER_ADDRESS)
@@ -75,13 +96,4 @@ class DebitCard(CardBase):
                 bot.send_text(chat_id=event.data['from']['userId'], text=messages.WRONG_DATE)
         elif self.passportOrganization is None:
             self.passportOrganization = value
-            result = {'debitCard': json.dumps(self.__dict__), 'telegramId': event.data['from']['userId']}
-            response = requests.post(data.CUBA_HOST + data.CREATE_DEBIT_URL,
-                                     json=result, headers={'content-type': 'application/json'})
-            code = response.status_code
-            print(code)
-            if code == 200:
-                bot.send_text(chat_id=event.data['from']['userId'],
-                              text=messages.SUCCESSFUL_APPLICATION + response.text)
-            else:
-                bot.send_text(chat_id=event.data['from']['userId'], text=messages.FAILED)
+            self.send_data(bot, event)
