@@ -22,7 +22,8 @@ def get_message(message):
         voice_assistant.send_voice_message(message, messages.TECH_SUPPORT_EXIT)
     else:
         result = {'telegramId': message.from_user.id,
-                  'message': message.text}
+                  'message': message.text,
+                  'userType': 'tlg'}
         response = requests.post(data.CUBA_HOST + data.SEND_MESSAGE_URL,
                                  json=result, headers={'content-type': 'application/json'})
         code = response.status_code
