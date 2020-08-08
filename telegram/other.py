@@ -1,7 +1,7 @@
 import telebot
 
 import messages
-from telegram import telegram_main
+from telegram import telegram_main, voice_assistant
 
 globalBot = telebot.TeleBot
 
@@ -12,6 +12,7 @@ def init_holding(message, bot):
     keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
     keyboard.add('вклады', 'брокерский счет', 'иис', 'опиф', 'подбор инвестиционной программы', messages.BACK)
     globalBot.send_message(message.from_user.id, text=messages.ENTER_TYPE, reply_markup=keyboard)
+    voice_assistant.send_voice_message(message, messages.ENTER_TYPE)
     globalBot.register_next_step_handler(message, set_type_holding)
 
 
@@ -22,15 +23,19 @@ def set_type_holding(message):
         keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
         keyboard.add('сейф', 'простое решение', 'иис', messages.BACK)
         globalBot.send_message(message.from_user.id, text=messages.ENTER_TYPE, reply_markup=keyboard)
+        voice_assistant.send_voice_message(message, messages.ENTER_TYPE)
         globalBot.register_next_step_handler(message, set_iis)
     elif message.text == 'опиф':
         keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
         keyboard.add('опиф', 'опиф Лалэ', messages.BACK)
         globalBot.send_message(message.from_user.id, text=messages.ENTER_TYPE, reply_markup=keyboard)
+        voice_assistant.send_voice_message(message, messages.ENTER_TYPE)
         globalBot.register_next_step_handler(message, set_opif)
     else:
         globalBot.send_message(message.from_user.id, messages.ENTERING_PROGRESS_MESSAGE_1)
+        voice_assistant.send_voice_message(message, messages.ENTERING_PROGRESS_MESSAGE_1)
         globalBot.send_message(message.from_user.id, messages.ENTER_FIO)
+        voice_assistant.send_voice_message(message, messages.ENTER_FIO)
         globalBot.register_next_step_handler(message, set_full_name)
 
 
@@ -39,7 +44,9 @@ def set_iis(message):
         init_holding(message, globalBot)
     else:
         globalBot.send_message(message.from_user.id, messages.ENTERING_PROGRESS_MESSAGE_1)
+        voice_assistant.send_voice_message(message, messages.ENTERING_PROGRESS_MESSAGE_1)
         globalBot.send_message(message.from_user.id, messages.ENTER_FIO)
+        voice_assistant.send_voice_message(message, messages.ENTER_FIO)
         globalBot.register_next_step_handler(message, set_full_name)
 
 
@@ -48,15 +55,19 @@ def set_opif(message):
         init_holding(message, globalBot)
     else:
         globalBot.send_message(message.from_user.id, messages.ENTERING_PROGRESS_MESSAGE_1)
+        voice_assistant.send_voice_message(message, messages.ENTERING_PROGRESS_MESSAGE_1)
         globalBot.send_message(message.from_user.id, messages.ENTER_FIO)
+        voice_assistant.send_voice_message(message, messages.ENTER_FIO)
         globalBot.register_next_step_handler(message, set_full_name)
 
 
 def set_full_name(message):
     globalBot.send_message(message.from_user.id, messages.ENTER_PHONE_NUMBER)
+    voice_assistant.send_voice_message(message, messages.ENTER_PHONE_NUMBER)
     globalBot.register_next_step_handler(message, set_phone)
 
 
 def set_phone(message):
-    globalBot.send_message(message.from_user.id, 'Мы с вами свяжемся')
+    globalBot.send_message(message.from_user.id, messages.GOOD)
+    voice_assistant.send_voice_message(message, messages.GOOD)
     telegram_main.start(message)

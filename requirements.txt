@@ -13,6 +13,7 @@ Jinja2==2.11.2
 mailru-im-bot==0.0.13
 MarkupSafe==1.1.1
 monotonic==1.5
+phonenumbers==8.12.7
 pyTelegramBotAPI==3.7.2
 python-baseconv==1.2.1
 python-dateutil==2.8.1
@@ -23,5 +24,3 @@ telebot==0.0.3
 urllib3==1.24.3
 vk-api==11.5.0
 Werkzeug==1.0.1
-phonenumbers
-gTTS

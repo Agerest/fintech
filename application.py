@@ -3,6 +3,7 @@ import telebot
 
 import data
 import messages
+from telegram import voice_assistant
 
 
 class Application(object):
@@ -41,9 +42,11 @@ def get_keyboard(message):
         keyboard = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
         keyboard.row(*result_array)
         globalBot.send_message(message.from_user.id, messages.ENTER_CURRENT_APPLICATION, reply_markup=keyboard)
+        voice_assistant.send_voice_message(message, messages.ENTER_CURRENT_APPLICATION)
         globalBot.register_next_step_handler(message, message_handler)
     else:
         globalBot.send_message(message.from_user.id, messages.FAILED)
+        voice_assistant.send_voice_message(message, messages.FAILED)
 
 
 def message_handler(message):
@@ -54,5 +57,7 @@ def message_handler(message):
             status = app.status
     if status != '':
         globalBot.send_message(message.from_user.id, messages.APPLICATION_STATUS + status)
+        voice_assistant.send_voice_message(message, messages.APPLICATION_STATUS + status)
     else:
         globalBot.send_message(message.from_user.id, messages.FAILED)
+        voice_assistant.send_voice_message(message, messages.FAILED)

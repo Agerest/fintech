@@ -27,6 +27,7 @@ def start(message):
     keyboard.row(messages.APPLICATION_LIST, messages.VOICE_GENERATOR)
     keyboard.row(messages.HOLDING, messages.APPLICATION_LIST)
     bot.send_message(message.chat.id, messages.GREETING_NEW_USERS, reply_markup=keyboard)
+    voice_assistant.send_voice_message(message, messages.GREETING_NEW_USERS)
 
 
 @bot.message_handler(commands=['test'])
