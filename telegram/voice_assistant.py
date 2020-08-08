@@ -1,11 +1,21 @@
 import os
 
+import telebot
 from gtts import gTTS
 
 from telegram import telegram_main
 
-voices_enable = telegram_main.voices_enable
-globalBot = telegram_main.bot
+voices_enable = {}
+globalBot = telebot.TeleBot
+
+
+def change(message, bot):
+    global globalBot
+    globalBot = bot
+    voices_enable[message.chat.id] = not voices_enable[message.chat.id]
+    globalBot.send_message(message.chat.id,
+                           'Voice assistant is ' + ('enabled' if voices_enable[message.chat.id] else 'disabled'))
+    telegram_main.start(message)
 
 
 def send_voice_message(message, text):

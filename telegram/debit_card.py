@@ -6,7 +6,7 @@ import telebot
 
 import data
 import messages
-from telegram import telegram_main
+from telegram import telegram_main, voice_assistant
 
 
 class DebitCard:
@@ -47,6 +47,7 @@ def set_type(message):
         telegram_main.start(message)
     else:
         application.type = message.text
+        voice_assistant.send_voice_message(message, messages.ENTERING_PROGRESS_MESSAGE_1)
         globalBot.send_message(message.from_user.id, messages.ENTERING_PROGRESS_MESSAGE_1)
         globalBot.send_message(message.from_user.id, messages.ENTER_FIO)
         globalBot.register_next_step_handler(message, set_full_name)
