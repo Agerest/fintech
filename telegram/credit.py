@@ -43,7 +43,11 @@ def init(message, bot):
     globalBot = bot
     application = CreditCard()
     keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
-    keyboard.add('emotion', messages.BACK)
+    keyboard.add('Кредит наличными', 'Кредит под залог недвижимости')
+    keyboard.add('Рефинансирование', 'Кредит на личное подсобное хозяйство')
+    keyboard.add('Вторичное жилье', 'Новостройка с господдержкой')
+    keyboard.add('Новостройки', 'Рефинансировани')
+    keyboard.add(messages.BACK)
     globalBot.send_message(message.from_user.id, text=messages.ENTER_TYPE, reply_markup=keyboard)
     globalBot.register_next_step_handler(message, set_type)
 
@@ -90,7 +94,7 @@ def set_phone_number(message):
     else:
         application.phoneNumber = message.text
         result = {'creditCard': json.dumps(application.__dict__), 'telegramId': message.from_user.id, 'userType': 'tlg'}
-        response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_CARD_URL,
+        response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_URL,
                                  json=result, headers={'content-type': 'application/json'})
         code = response.status_code
         print(code)
@@ -225,7 +229,7 @@ def set_marital_status(message):
 
 def send_application(message):
     result = {'creditCard': json.dumps(application.__dict__)}
-    response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_CARD_FULL_URL,
+    response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_FULL_URL,
                              json=result, headers={'content-type': 'application/json'})
     code = response.status_code
     print(code)
