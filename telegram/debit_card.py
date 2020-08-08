@@ -61,7 +61,7 @@ def set_full_name(message):
         voice_assistant.send_voice_message(message, messages.BREAK)
         telegram_main.start(message)
     else:
-        split_message = message.text
+        split_message = message.text.split()
         application.lastName = split_message[0]
         application.firstName = split_message[1]
         application.middleName = split_message[2]
@@ -140,7 +140,7 @@ def set_passport_number_and_serial(message):
         telegram_main.start(message)
     else:
         if application.passportNumber == '':
-            split_message = message.text
+            split_message = message.text.split()
             application.passportNumber = split_message[0]
             application.passportSerial = split_message[1]
         globalBot.send_message(message.from_user.id, messages.ENTER_PASSPORT_DATE)
