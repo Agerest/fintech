@@ -29,4 +29,4 @@ def send_voice_message(message, text):
             file.close()
             os.remove(filename)
     except Exception:
-        print('exception')
+        pass

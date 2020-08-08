@@ -7,6 +7,7 @@ import telebot
 import data
 import messages
 from telegram import telegram_main, voice_assistant
+from telegram.debit_card import phone_is_valid
 
 
 class CreditCard:
@@ -72,6 +73,11 @@ def set_full_name(message):
         telegram_main.start(message)
     else:
         split_message = message.text.split()
+        if len(split_message) != 3:
+            globalBot.send_message(message.from_user.id, messages.ENTER_FIO)
+            voice_assistant.send_voice_message(message, messages.ENTER_FIO)
+            globalBot.register_next_step_handler(message, set_full_name)
+            return
         application.lastName = split_message[0]
         application.firstName = split_message[1]
         application.middleName = split_message[2]
@@ -105,6 +111,11 @@ def set_phone_number(message):
         telegram_main.start(message)
     else:
         application.phoneNumber = message.text
+        if not phone_is_valid(message.text):
+            globalBot.send_message(message.from_user.id, messages.WRONG_PHONE_FORMAT)
+            voice_assistant.send_voice_message(message, messages.WRONG_PHONE_FORMAT)
+            globalBot.register_next_step_handler(message, set_phone_number)
+            return
         result = {'creditCard': json.dumps(application.__dict__), 'telegramId': message.from_user.id, 'userType': 'tlg'}
         response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_URL,
                                  json=result, headers={'content-type': 'application/json'})
@@ -151,8 +162,13 @@ def set_passport_number_and_serial(message):
     else:
         if application.passportNumber == '':
             split_message = message.text.split()
-            application.passportNumber = split_message[0]
-            application.passportSerial = split_message[1]
+            if len(split_message) != 2 or len(split_message[0]) > 4 or len(split_message[1]) > 6:
+                globalBot.send_message(message.from_user.id, messages.ENTER_PASSPORT_DATA)
+                voice_assistant.send_voice_message(message, messages.ENTER_PASSPORT_DATA)
+                globalBot.register_next_step_handler(message, set_passport_number_and_serial)
+                return
+            application.passportSerial = split_message[0]
+            application.passportNumber = split_message[1]
         globalBot.send_message(message.from_user.id, messages.ENTER_PASSPORT_DATE)
         voice_assistant.send_voice_message(message, messages.ENTER_PASSPORT_DATE)
         globalBot.register_next_step_handler(message, set_passport_date)
@@ -235,6 +251,11 @@ def set_employer_phone_number(message):
         send_application(message)
         telegram_main.start(message)
     else:
+        if not phone_is_valid(message.text):
+            globalBot.send_message(message.from_user.id, messages.WRONG_PHONE_FORMAT)
+            voice_assistant.send_voice_message(message, messages.WRONG_PHONE_FORMAT)
+            globalBot.register_next_step_handler(message, set_employer_phone_number)
+            return
         application.employerPhoneNumber = message.text
         globalBot.send_message(message.from_user.id, messages.ENTER_MARITAL_STATUS)
         voice_assistant.send_voice_message(message, messages.ENTER_MARITAL_STATUS)

@@ -2,6 +2,7 @@ import telebot
 
 import messages
 from telegram import telegram_main, voice_assistant
+from telegram.debit_card import phone_is_valid
 
 globalBot = telebot.TeleBot
 
@@ -62,12 +63,22 @@ def set_opif(message):
 
 
 def set_full_name(message):
+    if len(message.text.split()) != 3:
+        globalBot.send_message(message.from_user.id, messages.ENTER_FIO)
+        voice_assistant.send_voice_message(message, messages.ENTER_FIO)
+        globalBot.register_next_step_handler(message, set_full_name)
+        return
     globalBot.send_message(message.from_user.id, messages.ENTER_PHONE_NUMBER)
     voice_assistant.send_voice_message(message, messages.ENTER_PHONE_NUMBER)
     globalBot.register_next_step_handler(message, set_phone)
 
 
 def set_phone(message):
+    if not phone_is_valid(message.text):
+        globalBot.send_message(message.from_user.id, messages.WRONG_PHONE_FORMAT)
+        voice_assistant.send_voice_message(message, messages.WRONG_PHONE_FORMAT)
+        globalBot.register_next_step_handler(message, set_phone)
+        return
     globalBot.send_message(message.from_user.id, messages.GOOD)
     voice_assistant.send_voice_message(message, messages.GOOD)
     telegram_main.start(message)
