@@ -3,7 +3,7 @@ from flask import request
 
 import data
 from icq import icq_main
-from telegram import telegram_main, voice_assistant
+from telegram import telegram_main
 from vk import vk_main
 
 app = Flask(__name__)
@@ -34,7 +34,6 @@ def get_tasks():
     print('sending message \'%s\' to user_id=%s' % (message, user_id))
     if user_type == 'tlg':
         telegramBot.send_message(user_id, message)
-        voice_assistant.send_voice_message(message, message)
     if user_type == 'icq':
         icqBot.send_text(chat_id=user_id, text=message)
     if user_type == 'vk':
