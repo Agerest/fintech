@@ -66,14 +66,18 @@ def set_type(message):
 
 
 def set_full_name(message):
-    global globalBot
-    split_message = message.text.split()
-    application.lastName = split_message[0]
-    application.firstName = split_message[1]
-    application.middleName = split_message[2]
-    globalBot.send_message(message.from_user.id, messages.ENTER_BIRTHDATE)
-    voice_assistant.send_voice_message(message, messages.ENTER_BIRTHDATE)
-    globalBot.register_next_step_handler(message, set_birthdate)
+    if message.text == messages.CANCEL:
+        globalBot.send_message(message.from_user.id, messages.BREAK)
+        voice_assistant.send_voice_message(message, messages.BREAK)
+        telegram_main.start(message)
+    else:
+        split_message = message.text.split()
+        application.lastName = split_message[0]
+        application.firstName = split_message[1]
+        application.middleName = split_message[2]
+        globalBot.send_message(message.from_user.id, messages.ENTER_BIRTHDATE)
+        voice_assistant.send_voice_message(message, messages.ENTER_BIRTHDATE)
+        globalBot.register_next_step_handler(message, set_birthdate)
 
 
 def set_birthdate(message):
