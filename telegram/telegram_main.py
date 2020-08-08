@@ -6,7 +6,10 @@ import messages
 import techsupport
 from telegram import debit_card, credit_card
 
+
 bot = telebot.TeleBot(data.BOT_TOKEN)
+
+voices_enable = {}
 
 
 def init():
@@ -19,10 +22,13 @@ def start_message(message):
 
 
 def start(message):
+    if message.chat.id not in voices_enable:
+        voices_enable[message.chat.id] = False
     keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
     keyboard.row(messages.CREDIT_CARD, messages.DEBIT_CARD)
     keyboard.row(messages.CREDIT, messages.TECH_SUPPORT)
     keyboard.row(messages.APPLICATION_LIST)
+    keyboard.row(messages.VOICE_GENERATOR)
     bot.send_message(message.chat.id, messages.GREETING_NEW_USERS, reply_markup=keyboard)
 
 
@@ -43,3 +49,6 @@ def send_text(message):
         credit_card.init(message, bot)
     if message.text == messages.APPLICATION_LIST:
         application.init(message, bot)
+    if message.text == messages.VOICE_GENERATOR:
+        voices_enable[message.chat.id] = not voices_enable[message.chat.id]
+        bot.send_message(message.chat.id, 'Voice assistant is ' + ('enabled' if voices_enable[message.chat.id] else 'disabled'))

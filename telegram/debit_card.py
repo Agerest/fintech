@@ -28,9 +28,6 @@ application = DebitCard
 globalBot = telebot.TeleBot
 
 
-
-
-
 # init method
 def init(message, bot):
     global application
