@@ -3,7 +3,7 @@ import telebot
 
 import data
 import messages
-from telegram import voice_assistant
+from telegram import voice_assistant, telegram_main
 
 globalBot = telebot.TeleBot
 
@@ -20,6 +20,7 @@ def get_message(message):
     if message.text.lower() == 'выход':
         globalBot.send_message(message.from_user.id, messages.TECH_SUPPORT_EXIT)
         voice_assistant.send_voice_message(message, messages.TECH_SUPPORT_EXIT)
+        telegram_main.start(message)
     else:
         result = {'telegramId': message.from_user.id,
                   'message': message.text,

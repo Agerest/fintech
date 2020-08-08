@@ -101,7 +101,7 @@ def set_phone_number(message):
         telegram_main.start(message)
     else:
         application.phoneNumber = message.text
-        result = {'creditCard': json.dumps(application.__dict__), 'telegramId': message.from_user.id, 'userType': 'tlg'}
+        result = {'credit': json.dumps(application.__dict__), 'telegramId': message.from_user.id, 'userType': 'tlg'}
         response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_URL,
                                  json=result, headers={'content-type': 'application/json'})
         code = response.status_code
@@ -250,7 +250,7 @@ def set_marital_status(message):
 
 
 def send_application(message):
-    result = {'creditCard': json.dumps(application.__dict__)}
+    result = {'credit': json.dumps(application.__dict__)}
     response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_FULL_URL,
                              json=result, headers={'content-type': 'application/json'})
     code = response.status_code

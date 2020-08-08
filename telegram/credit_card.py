@@ -63,7 +63,7 @@ def set_type(message):
 
 def set_full_name(message):
     global globalBot
-    split_message = message.text
+    split_message = message.text.split()
     application.lastName = split_message[0]
     application.firstName = split_message[1]
     application.middleName = split_message[2]
@@ -98,7 +98,7 @@ def set_phone_number(message):
     else:
         application.phoneNumber = message.text
         result = {'creditCard': json.dumps(application.__dict__), 'telegramId': message.from_user.id, 'userType': 'tlg'}
-        response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_URL,
+        response = requests.post(data.CUBA_HOST + data.CREATE_CREDIT_CARD_URL,
                                  json=result, headers={'content-type': 'application/json'})
         code = response.status_code
         print(code)
