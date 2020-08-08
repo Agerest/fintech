@@ -31,7 +31,7 @@ def get_tasks():
     user_id = content['telegramId']
     message = content['message']
     user_type = content['userType']
-    print('sending message to user_id=%s' % user_id)
+    print('sending message \'%s\' to user_id=%s' % (message, user_id))
     if user_type == 'tlg':
         telegramBot.send_message(user_id, message)
     if user_type == 'icq':

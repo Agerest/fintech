@@ -6,6 +6,7 @@ import telebot
 
 import data
 import messages
+from telegram import telegram_main
 
 
 class DebitCard:
@@ -28,41 +29,38 @@ application = DebitCard
 globalBot = telebot.TeleBot
 
 
-
-
-
 # init method
 def init(message, bot):
     global application
     global globalBot
     globalBot = bot
     application = DebitCard()
-    globalBot.send_message(message.from_user.id, messages.ENTER_FIRST_NAME)
-    globalBot.register_next_step_handler(message, set_first_name)
+    keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
+    keyboard.add('aurum', 'evolution', 'generation', 'akbars premium', 'классическая карта', 'мир долголетия',
+                 messages.BACK)
+    globalBot.send_message(message.from_user.id, text=messages.ENTER_TYPE, reply_markup=keyboard)
+    globalBot.register_next_step_handler(message, set_type)
 
 
-def set_first_name(message):
-    global globalBot
-    application.firstName = message.text
-    globalBot.send_message(message.from_user.id, messages.ENTER_LAST_NAME)
-    globalBot.register_next_step_handler(message, set_last_name)
+def set_type(message):
+    if message.text == messages.BACK:
+        telegram_main.start(message)
+    else:
+        application.type = message.text
+        globalBot.send_message(message.from_user.id, messages.ENTERING_PROGRESS_MESSAGE_1)
+        globalBot.send_message(message.from_user.id, messages.ENTER_FIO)
+        globalBot.register_next_step_handler(message, set_full_name)
 
 
-def set_last_name(message):
+def set_full_name(message):
     if message.text == messages.CANCEL:
         globalBot.send_message(message.from_user.id, messages.BREAK)
+        telegram_main.start(message)
     else:
-        application.lastName = message.text
-        globalBot.send_message(message.from_user.id, messages.ENTER_MIDDLE_NAME)
-        globalBot.register_next_step_handler(message, set_middle_name)
-
-
-def set_middle_name(message):
-    if message.text == messages.CANCEL:
-        globalBot.send_message(message.from_user.id, messages.BREAK)
-    else:
-        if application.middleName == '':
-            application.middleName = message.text
+        split_message = message.text
+        application.lastName = split_message[0]
+        application.firstName = split_message[1]
+        application.middleName = split_message[2]
         globalBot.send_message(message.from_user.id, messages.ENTER_BIRTHDATE)
         globalBot.register_next_step_handler(message, set_birthdate)
 
@@ -70,6 +68,7 @@ def set_middle_name(message):
 def set_birthdate(message):
     if message.text == messages.CANCEL:
         globalBot.send_message(message.from_user.id, messages.BREAK)
+        telegram_main.start(message)
     else:
         try:
             datetime.datetime.strptime(message.text, '%Y-%m-%d')
@@ -84,6 +83,7 @@ def set_birthdate(message):
 def set_phone_number(message):
     if message.text == messages.CANCEL:
         globalBot.send_message(message.from_user.id, messages.BREAK)
+        telegram_main.start(message)
     else:
         application.phoneNumber = message.text
         result = {'debitCard': json.dumps(application.__dict__), 'telegramId': message.from_user.id, 'userType': 'tlg'}
@@ -103,6 +103,7 @@ def set_phone_number(message):
 def set_email(message):
     if message.text == messages.CANCEL:
         send_application(message)
+        telegram_main.start(message)
     else:
         application.email = message.text
         globalBot.send_message(message.from_user.id, messages.ENTER_ADDRESS)
@@ -112,6 +113,7 @@ def set_email(message):
 def set_address(message):
     if message.text == messages.CANCEL:
         send_application(message)
+        telegram_main.start(message)
     else:
         application.address = message.text
         globalBot.send_message(message.from_user.id, messages.ENTER_PASSPORT_DATA)
@@ -121,6 +123,7 @@ def set_address(message):
 def set_passport_number_and_serial(message):
     if message.text == messages.CANCEL:
         send_application(message)
+        telegram_main.start(message)
     else:
         if application.passportNumber == '':
             split_message = message.text
@@ -133,6 +136,7 @@ def set_passport_number_and_serial(message):
 def set_passport_date(message):
     if message.text == messages.CANCEL:
         send_application(message)
+        telegram_main.start(message)
     else:
         try:
             datetime.datetime.strptime(message.text, '%Y-%m-%d')
@@ -148,10 +152,12 @@ def set_passport_date(message):
 def set_passport_organization(message):
     if message.text == messages.CANCEL:
         send_application(message)
+        telegram_main.start(message)
     else:
         application.passportOrganization = message.text
         application.telegramId = message.from_user.id
         send_application(message)
+        telegram_main.start(message)
 
 
 def send_application(message):
